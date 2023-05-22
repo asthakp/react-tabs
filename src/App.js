@@ -1,25 +1,26 @@
-import logo from './logo.svg';
+import React from 'react'
 import './App.css';
+import { Route, Routes } from 'react-router-dom';
+import Cards from './components/Cards'
+import Users from './components/Users';
+import Posts from './components/Posts';
+import TabComp from './pages/TabComponent'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+const App=()=>{
+  
+  return(
+    <div>
+     <Routes>
+      <Route path="/" element={<TabComp />}/>
+      <Route path="/users" element={<Users />}/>
+      <Route path="/posts" element={<Posts />}/>
+      <Route path="/products" element={<Cards />}/>
+  
+     </Routes>
+      
     </div>
-  );
-}
+  )
 
+}
 export default App;
