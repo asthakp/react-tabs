@@ -1,34 +1,38 @@
 import React from "react";
-// import { useEffect, useState } from "react";
-// import { getData } from "../services/axios.service";
-// import { USER_URL } from "../constants/api.constants";
-import Button from 'react-bootstrap/Button';
-import {Card} from 'react-bootstrap';
+import Table from 'react-bootstrap/Table';
+
 
 const Users = ({users}) => {
-//   const [users, setUsers] = useState([]);
-
-//   useEffect(() => {
-//     getData(USER_URL).then((resp) => setUsers(resp.data.users));
-//   },[]);
+  let columnName;
+  if (users.length>0){
+     columnName=Object.keys(users[0])
+  }
 
   return (
-    <div className="d-flex justify-content-center  flex-wrap">
-      {users.map((user) => {
-        return (
-        <div key={user.id} className="m-3" >
-          <Card style={{ width: "18rem" }}>
-            <Card.Img variant="top" className="h-50" src={user.image} />
+    <div>
+       <Table striped bordered hover>
+      <thead>
+        <tr>
+       {columnName && columnName.map((columnHeading, index)=>{
+        return <th key={index}>{columnHeading}</th>
+       })} 
+        </tr>
+      </thead>
+      <tbody>
+        {users.map((row, index)=>{
+         return <tr key={index}>
+          {
+            Object.values(row).map((rowData)=>{
+            return <td key={rowData.id}>{typeof rowData==='object'?JSON.stringify(rowData):rowData}</td>
+            })
+          }
+         </tr>
+        })
 
-            <Card.Body>
-              <Card.Title>{user.firstName}</Card.Title>
-              <Card.Text>{user.email}</Card.Text>
-              <Button variant="primary">Go somewhere</Button>
-            </Card.Body>
-          </Card>
-          </div>
-        );
-      })}
+        }
+        
+      </tbody>
+    </Table>
     </div>
   );
 };
