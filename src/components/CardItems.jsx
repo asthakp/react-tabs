@@ -9,7 +9,7 @@ const CardItems = ({ product, handleDel, handleEdit }) => {
         <Card.Img
           variant="top"
           style={{ height: "200px" }}
-          src={product.images[0]}
+          src={product.thumbnail}
         />
 
         <Card.Body>

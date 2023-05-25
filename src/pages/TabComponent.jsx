@@ -5,6 +5,7 @@ import Users from "../components/Users";
 import Posts from "../components/Posts";
 import { getData } from "../services/axios.service";
 import ModalComp from "../components/ModalComp";
+import AddModal from "../components/AddModal";
 
 function TabComp() {
   const [key, setKey] = useState("products");
@@ -13,6 +14,8 @@ function TabComp() {
   const [posts, setPosts] = useState([]);
   const [show, setShow] = useState(false);
   const [editProduct, seteditProduct] = useState({});
+  const [addShow, setaddShow] = useState(false);
+  const [addProduct, setaddProduct] = useState({});
 
   const handleDel = (e, id) => {
     e.preventDefault();
@@ -24,6 +27,9 @@ function TabComp() {
 
   const handleEdit = (e, product) => {
     e.preventDefault();
+    //editProduct is created n saved because this product is a individual data from whichever edit btn
+    //we clicked. the data is available locally within the function only. we need to send this data
+    //to modal. so through set we created a global variable to send data.
     seteditProduct(product);
     setShow(true);
   };
@@ -39,6 +45,7 @@ function TabComp() {
       ...editProduct,
       [e.target.name]: e.target.value,
     };
+
     seteditProduct(updatedData);
   };
 
@@ -50,6 +57,31 @@ function TabComp() {
     setProd(updatedProd);
     setShow(false);
   };
+
+  const handleAdd = (e) => {
+    e.preventDefault();
+    setaddShow(true);
+  };
+
+  const handleAddClose = () => {
+    setaddShow(false);
+  };
+
+  const handleAddChange = (e) => {
+    const newProduct = {
+      ...addProduct,
+      [e.target.name]: e.target.value,
+      id: Math.random(),
+    };
+    setaddProduct(newProduct);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    prod.unshift(addProduct);
+    setaddShow(false);
+  };
+
   useEffect(() => {
     getData(key).then((res) => {
       if (key === "products") {
@@ -66,7 +98,12 @@ function TabComp() {
     <>
       <Tabs activeKey={key} onSelect={(k) => setKey(k)}>
         <Tab eventKey="products" title="Product">
-          <Cards prod={prod} handleDel={handleDel} handleEdit={handleEdit} />
+          <Cards
+            prod={prod}
+            handleDel={handleDel}
+            handleEdit={handleEdit}
+            handleAdd={handleAdd}
+          />
         </Tab>
         <Tab eventKey="users" title="Users">
           <Users users={users} />
@@ -81,6 +118,12 @@ function TabComp() {
         show={show}
         handleEditChanges={handleEditChanges}
         prod={editProduct}
+      />
+      <AddModal
+        show={addShow}
+        handleAddChange={handleAddChange}
+        handleSubmit={handleSubmit}
+        handleAddClose={handleAddClose}
       />
     </>
   );
